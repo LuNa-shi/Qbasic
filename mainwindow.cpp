@@ -5,9 +5,11 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+
     ui->setupUi(this);
     setUIExitDebugMode();
-
+    program = Program();
+    parser = Parser();
     connect(ui->btnDebugMode, &QPushButton::clicked, this, &MainWindow::setUIForDebugMode);
     connect(ui->btnExitDebugMode, &QPushButton::clicked, this, &MainWindow::setUIExitDebugMode);
     connect(ui->btnClearCode, &QPushButton::clicked, this, &MainWindow::clearAllCode);
@@ -24,7 +26,24 @@ void MainWindow::on_cmdLineEdit_editingFinished()
     QString cmd = ui->cmdLineEdit->text();
     ui->cmdLineEdit->setText("");
 
-    ui->CodeDisplay->append(cmd);
+    //from Qstring to std::string
+    std::string cmdStr = cmd.toStdString();
+    Statement *stmt = parser.getStatement(cmdStr);
+    if (stmt != nullptr)
+    {
+        program.appendStatement(stmt);
+    }
+    else
+    {
+        ui->textBrowser->append("Syntax Error: " + cmd);
+    }
+    std::string output = program.executeNextStatement();
+    ui->textBrowser->append(QString::fromStdString(output));
+    std::string code = program.getCode();
+    ui->CodeDisplay->setText(QString::fromStdString(code));
+    ui->treeDisplay->setText(QString::fromStdString(program.getSyntaxTree()));
+
+    
 }
 
 void MainWindow::setUIForDebugMode(){

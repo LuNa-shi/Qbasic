@@ -2,7 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include <QLineEdit>
+#include "exp.h"
+#include "tokenizer.h"
+#include "parser.h"
+#include "evalstate.h"
+#include "statement.h"
+#include "program.h"
+#include <bits/stdc++.h>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -20,6 +27,9 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    Program program;
+    Parser parser;
+    
 
     void setUIForDebugMode();
     void setUIExitDebugMode();
