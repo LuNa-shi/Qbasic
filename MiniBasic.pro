@@ -11,6 +11,7 @@ CONFIG += c++11
 
 SOURCES += \
     context.cpp \
+    displayinfo.cpp \
     exp.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
 
 HEADERS += \
     context.h \
+    displayinfo.h \
     exp.h \
     mainwindow.h \
     parser.h \

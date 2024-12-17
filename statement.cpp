@@ -3,15 +3,19 @@
 #include <utility>
 
 
-Statement::Statement(int stmtNum) {
+Statement::Statement(int stmtNum, std::string stmt) {
     statementNumber = stmtNum;
+    statementText = std::move(stmt);
     type = ENDSTATE;
 }
 
-int Statement::getStmtNum() const {
+int Statement::getStatementNum() const {
     return statementNumber;
 }
 
+std::string Statement::toString() {
+    return statementText;
+}
 
 /** Let statement */
 
@@ -21,8 +25,8 @@ LetStatement::LetStatement():
     exp = nullptr;
 }
 
-LetStatement::LetStatement(int stmtNum, std::string var, Expression *exp):
-    Statement(stmtNum),
+LetStatement::LetStatement(int stmtNum, std::string var, Expression *exp, std::string stmt):
+    Statement(stmtNum,stmt),
     variable(std::move(var)) {
     type = LET;
     this->exp = exp;
@@ -32,8 +36,8 @@ LetStatement::~LetStatement() {
     delete exp;
 }
 
-void LetStatement::execute(SymbolTable & context) {
-    context.setValue(variable, exp->eval(context));
+void LetStatement::execute(RuntimeState & rState) {
+    rState.context->setValue(variable, exp->eval(*rState.context));
 }
 
 std::string LetStatement::toString() {
@@ -47,8 +51,8 @@ PrintStatement::PrintStatement():
     exp = nullptr;
 }
 
-PrintStatement::PrintStatement(int stmtNum, Expression *exp):
-    Statement(stmtNum) {
+PrintStatement::PrintStatement(int stmtNum, Expression *exp, std::string stmt):
+    Statement(stmtNum,stmt) {
     type = PRINT;
     this->exp = exp;
 }
@@ -57,8 +61,8 @@ PrintStatement::~PrintStatement() {
     delete exp;
 }
 
-void PrintStatement::execute(SymbolTable & context) {
-    std::cout << exp->eval(context)
+void PrintStatement::execute(RuntimeState & rState) {
+    std::cout << exp->eval(*rState.context)
                 << std::endl;
 }
 

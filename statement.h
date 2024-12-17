@@ -2,7 +2,7 @@
 #define STATEMENT_H
 #include <bits/stdc++.h>
 #include "exp.h"
-#include "context.h"
+
 
 
 enum StatementType
@@ -19,15 +19,17 @@ enum StatementType
 class Statement
 {
 public:
-    explicit Statement(int stmtNum = 0);
+    Statement() = default;
+    Statement(int stmtNum,std::string stmt);
     virtual ~Statement() = default;
-    virtual void execute(SymbolTable & context) = 0;
-    virtual std::string toString() = 0;
-    int getStmtNum() const;
+    virtual void execute(RuntimeState & rState) = 0;
+    virtual std::string toString();
+    int getStatementNum() const;
 
 
 protected:
-    int statementNumber;    
+    int statementNumber;
+    std::string statementText;
     StatementType type;
 };
 
@@ -35,9 +37,9 @@ class LetStatement : public Statement
 {
 public:
     LetStatement();
-    LetStatement(int stmtNum, std::string var, Expression *exp);
+    LetStatement(int stmtNum, std::string var, Expression *exp, std::string stmt);
     ~LetStatement() override;
-    void execute(SymbolTable & context) override;
+    void execute(RuntimeState & rState) override;
     std::string toString() override;
 
 
@@ -50,9 +52,9 @@ class PrintStatement : public Statement
 {
 public:
     PrintStatement();
-    PrintStatement(int stmtNum, Expression *exp);
+    PrintStatement(int stmtNum, Expression *exp, std::string stmt);
     ~PrintStatement() override;
-    void execute(SymbolTable & context) override;
+    void execute(RuntimeState & rState) override;
     std::string toString() override;
 
 private:

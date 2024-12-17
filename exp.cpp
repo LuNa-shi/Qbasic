@@ -8,7 +8,7 @@ ConstantExp::ConstantExp(int val) {
     value = val;
 }
 
-int ConstantExp::eval(SymbolTable & context) {
+int ConstantExp::eval(const SymbolTable & context) {
     return value;
 }
 
@@ -29,7 +29,7 @@ int ConstantExp::getConstantValue() const {
 IdentifierExp::IdentifierExp(std::string name) :
     name(std::move(name)) {}
 
-int IdentifierExp::eval(SymbolTable & context) {
+int IdentifierExp::eval(const SymbolTable & context) {
     if (!context.isDefined(name)) {
         std::cerr << "Variable " << name << " is not defined." << std::endl;
     }
@@ -59,7 +59,7 @@ CompoundExp::CompoundExp(std::string op, Expression *lhs, Expression *rhs):
 
 CompoundExp::~CompoundExp() = default;
 
-int CompoundExp::eval(SymbolTable & context) {
+int CompoundExp::eval(const SymbolTable & context) {
     if (op == "+") {
         return lhs->eval(context) + rhs->eval(context);
     } else if (op == "-") {

@@ -35,7 +35,7 @@ public:
 
     Expression();
     virtual ~Expression() = default;
-    virtual int eval(SymbolTable & context) = 0;
+    virtual int eval(const SymbolTable & context) = 0;
     virtual std::string toString() = 0;
     virtual ExpressionType type() = 0;
 
@@ -51,7 +51,7 @@ public:
 
     explicit ConstantExp(int val);
 
-    int eval(SymbolTable & context) override;
+    int eval(const SymbolTable & context) override;
     std::string toString() override;
     ExpressionType type() override;
 
@@ -74,7 +74,7 @@ class IdentifierExp: public Expression {
 public:
     explicit IdentifierExp(std::string name);
 
-    int eval(SymbolTable & context) override;
+    int eval(const SymbolTable & context) override;
     std::string toString() override;
     ExpressionType type() override;
 
@@ -98,7 +98,7 @@ public:
 
     ~CompoundExp() override;
 
-    int eval(SymbolTable & context) override;
+    int eval(const SymbolTable & context) override;
     std::string toString() override;
     ExpressionType type() override;
 

@@ -43,10 +43,11 @@ std::vector<Token> Tokenizer::tokenize(std::string &str)
       | (?P<EQUALS>=)                    # 等号
       |(?P<LESS><)                       # 小于号
       |(?P<GREATER>>)                    # 大于号
+      | (?P<OTHER>\?)                    # 其他任何字符
     )";
 
     // 去掉注释和空白，以便 C++ 正则引擎可以正确解析
-    std::string cleaned_pattern = R"((\-?\d+)|(\+|-|\*{1,2}|\/|mod)|([a-zA-Z_]\w*)|(\()|(\))|(=)|(<)|(>))";
+    std::string cleaned_pattern = R"((\-?\d+)|(\+|-|\*{1,2}|\/|mod)|([a-zA-Z_]\w*)|(\()|(\))|(=)|(<)|(>)|(\?))";
 
     // 定义输入表达式
     std::string expression = str;
@@ -67,7 +68,8 @@ std::vector<Token> Tokenizer::tokenize(std::string &str)
         RPAREN,
         EQUALS,
         LESS,
-        GREATER
+        GREATER,
+        OTHER
         };
 
     std::vector<Token> tokens;
@@ -96,10 +98,10 @@ std::vector<ExpToken> Tokenizer::tokenizeExp(std::vector<Token> &expTokens)
     {
         switch (token.type)
         {
-        case TokenType::NUMBER:
+        case NUMBER:
             tokens.push_back({NUM, token.value, 0});
             break;
-        case TokenType::OPERATOR:
+        case OPERATOR:
             if (token.value == "+")
             {
                 tokens.push_back({ADD, "+", 1});
@@ -124,13 +126,13 @@ std::vector<ExpToken> Tokenizer::tokenizeExp(std::vector<Token> &expTokens)
                 tokens.push_back({POW, "**", 3});
             }
             break;
-        case TokenType::VARIABLE:
+        case VARIABLE:
             tokens.push_back({VAR, token.value, 0});
             break;
-        case TokenType::LPAREN:
+        case LPAREN:
             tokens.push_back({LEFT_PAREN, "(", 0});
             break;
-        case TokenType::RPAREN:
+        case RPAREN:
             tokens.push_back({RIGHT_PAREN, ")", 0});
             break;
         default: //do nothing

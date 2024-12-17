@@ -1,6 +1,8 @@
+#pragma once
 #ifndef PROGRAM_H
 #define PROGRAM_H
 #include "statement.h"
+#include "runtimestate.h"
 #include <bits/stdc++.h>
 class Program
 {
@@ -10,13 +12,18 @@ public:
     void executeStatement(SymbolTable &context, Statement *stmt);
     void appendStatement(Statement *stmt);
     void removeStatement(int stmtNum);
-    std::string toString();
-
+    Statement* getStatement(int stmtNum);
+    Statement* getNextStatement(int stmtNum);
+    int getNextStatementNum(int stmtNum);
+    [[nodiscard]] std::vector<std::string> toString() const;
+    Statement* getFirstStatement();
+    void run();
 
 private:
-    std::unique_ptr<Statement> head;
-    // std::unique_ptr<Statement> tail;
+
+    std::list<Statement *> statementList;
     std::map<int, Statement *> statementMap;
+    RuntimeState *runtimeState;
 
 };
 

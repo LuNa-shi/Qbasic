@@ -16,11 +16,11 @@ Statement *Parser::getStatement(std::string &stmt)
         return nullptr;
     }
     Token lineNumber = tokens[0];
-    if (lineNumber.type != TokenType::NUMBER)
+    if (lineNumber.type != NUMBER)
     {
         return parseImmediate(tokens);
     }
-    return parseStatement(tokens);
+    return parseStatement(tokens,stmt);
 
 }
 
@@ -56,14 +56,14 @@ Statement *Parser::parseImmediate(std::vector<Token> &tokens)
     }
 }
 
-Statement* Parser::parseStatement(std::vector<Token> &tokens)
+Statement* Parser::parseStatement(std::vector<Token> &tokens,std::string stmt)
 {
     std::string cmd = tokens[1].value;
     if (cmd == "LET") {
-        return parseLet(tokens);
+        return parseLet(tokens,stmt);
     }
     if (cmd == "PRINT") {
-        return parsePrint(tokens);
+        return parsePrint(tokens,stmt);
     }
 
 }
@@ -142,7 +142,7 @@ Expression *Parser::parseExp(std::vector<Token> &expTokens)
 
 }
 
-Statement *Parser::parseLet(std::vector<Token> &tokens)
+Statement *Parser::parseLet(std::vector<Token> &tokens, std::string stmt)
 {
     if (tokens.size() < 4)
     {
@@ -156,11 +156,11 @@ Statement *Parser::parseLet(std::vector<Token> &tokens)
         return nullptr;
     }
 
-    return new LetStatement(std::stoi(tokens[0].value), var, exp);
+    return new LetStatement(std::stoi(tokens[0].value), var, exp,stmt);
 }
 
 // //unchecked
-Statement *Parser::parsePrint(std::vector<Token> &tokens)
+Statement *Parser::parsePrint(std::vector<Token> &tokens,std::string stmt)
 {
     if (tokens.size() < 3)
     {
@@ -172,7 +172,7 @@ Statement *Parser::parsePrint(std::vector<Token> &tokens)
     {
         return nullptr;
     }
-    return new PrintStatement(std::stoi(tokens[0].value), exp);
+    return new PrintStatement(std::stoi(tokens[0].value), exp,stmt);
 }
 
 

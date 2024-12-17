@@ -9,6 +9,7 @@
 #include "statement.h"
 #include "program.h"
 #include "context.h"
+#include "runtimestate.h"
 #include <bits/stdc++.h>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,7 +30,7 @@ private:
     Ui::MainWindow *ui;
     Program* program;
     Parser* parser;
-    SymbolTable* context;
+    RuntimeState* runtimeSatate;
 
     void setUIForDebugMode();
     void setUIExitDebugMode();

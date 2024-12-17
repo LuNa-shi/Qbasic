@@ -1,3 +1,11 @@
 #include "runtimestate.h"
 
-RuntimeState::RuntimeState() {}
+RuntimeState::RuntimeState() {
+    PC = 0;
+    symTable = new SymbolTable();
+    displayInfo = new DisplayInfo();
+}
+
+
+
+

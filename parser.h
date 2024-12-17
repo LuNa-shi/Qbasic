@@ -16,11 +16,11 @@ public:
 private:
     Tokenizer* tk;
     Statement *parseImmediate(std::vector<Token> &tokens);
-    Statement *parseStatement(std::vector<Token> &tokens);
+    Statement *parseStatement(std::vector<Token> &tokens,std::string stmt);
 
 
-    Statement *parseLet(std::vector<Token> &tokens);
-    Statement *parsePrint(std::vector<Token> &tokens);
+    Statement *parseLet(std::vector<Token> &tokens,std::string stmt);
+    Statement *parsePrint(std::vector<Token> &tokens,std::string stmt);
     Statement *parseInput(std::vector<Token> &tokens);
     Statement *parseIf(std::vector<Token> &tokens);
     Statement *parseGoto(std::vector<Token> &tokens);

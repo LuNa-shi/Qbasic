@@ -11,7 +11,8 @@ enum TokenType
     RPAREN,
     EQUALS,
     LESS,
-    GREATER
+    GREATER,
+    OTHER
 };
 
 struct Token

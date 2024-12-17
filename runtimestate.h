@@ -1,13 +1,15 @@
+#pragma once
 #ifndef RUNTIMESTATE_H
 #define RUNTIMESTATE_H
-#include "program.h"
+#include "displayinfo.h"
 #include "context.h"
 class RuntimeState
 {
 public:
     RuntimeState();
-
-private:
+    SymbolTable* symTable;
+    DisplayInfo* displayInfo;
+    int PC;
 
 };
 

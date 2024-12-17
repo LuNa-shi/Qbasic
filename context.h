@@ -6,9 +6,9 @@ class SymbolTable {
 
 public:
 
-    void setValue(std::string var, int value);
-    int getValue(std::string var);
-    bool isDefined(std::string var);
+    void setValue(const std::string& var, int value);
+    int getValue(const std::string &var) const;
+    bool isDefined(const std::string& var) const;
 
 private:
 
