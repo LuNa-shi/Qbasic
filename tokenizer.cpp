@@ -17,6 +17,7 @@ bool isPositiveNum(std::string &str)
             return false;
         }
     }
+    return true;
 }
 
 bool isNum(std::string &str)
@@ -59,14 +60,14 @@ std::vector<Token> Tokenizer::tokenize(std::string &str)
 
     // 定义分类名称
     std::vector<TokenType> categories = {
-        TokenType::NUMBER,
-        TokenType::OPERATOR,
-        TokenType::VARIABLE,
-        TokenType::LPAREN,
-        TokenType::RPAREN,
-        TokenType::EQUALS,
-        TokenType::LESS,
-        TokenType::GREATER
+        NUMBER,
+        OPERATOR,
+        VARIABLE,
+        LPAREN,
+        RPAREN,
+        EQUALS,
+        LESS,
+        GREATER
         };
 
     std::vector<Token> tokens;
@@ -85,6 +86,7 @@ std::vector<Token> Tokenizer::tokenize(std::string &str)
             }
         }
     }
+    return tokens;
 }
 
 std::vector<ExpToken> Tokenizer::tokenizeExp(std::vector<Token> &expTokens)

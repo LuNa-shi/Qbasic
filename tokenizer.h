@@ -2,7 +2,7 @@
 #define TOKENIZER_H
 #include <bits/stdc++.h>
 
-enum class TokenType
+enum TokenType
 {
     NUMBER,
     OPERATOR,
@@ -47,8 +47,8 @@ class Tokenizer
 {
 public:
     Tokenizer();
-    std::vector<Token> Tokenizer::tokenize(std::string &str);
-    std::vector<ExpToken> Tokenizer::tokenizeExp(std::vector<Token> &expTokens);
+    std::vector<Token> tokenize(std::string &str);
+    std::vector<ExpToken> tokenizeExp(std::vector<Token> &expTokens);
 
 private:
     std::vector<std::string> tokens;

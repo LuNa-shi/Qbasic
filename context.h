@@ -2,7 +2,7 @@
 #define CONTEXT_H
 #include <bits/stdc++.h>
 
-class EvaluationContext {
+class SymbolTable {
 
 public:
 

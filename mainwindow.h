@@ -29,7 +29,7 @@ private:
     Ui::MainWindow *ui;
     Program* program;
     Parser* parser;
-    EvaluationContext* context;
+    SymbolTable* context;
 
     void setUIForDebugMode();
     void setUIExitDebugMode();

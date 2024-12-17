@@ -16,6 +16,7 @@ SOURCES += \
     mainwindow.cpp \
     parser.cpp \
     program.cpp \
+    runtimestate.cpp \
     statement.cpp \
     tokenizer.cpp \
     tokenizeTest.cpp
@@ -26,6 +27,7 @@ HEADERS += \
     mainwindow.h \
     parser.h \
     program.h \
+    runtimestate.h \
     statement.h \
     tokenizer.h
 

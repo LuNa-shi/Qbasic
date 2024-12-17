@@ -7,7 +7,7 @@ class Program
 public:
     Program();
     ~Program();
-    void executeStatement(EvaluationContext &context, Statement *stmt);
+    void executeStatement(SymbolTable &context, Statement *stmt);
     void appendStatement(Statement *stmt);
     void removeStatement(int stmtNum);
     std::string toString();

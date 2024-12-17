@@ -62,6 +62,9 @@ Statement* Parser::parseStatement(std::vector<Token> &tokens)
     if (cmd == "LET") {
         return parseLet(tokens);
     }
+    if (cmd == "PRINT") {
+        return parsePrint(tokens);
+    }
 
 }
 Expression *Parser::parseExp(std::vector<Token> &expTokens)

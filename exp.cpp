@@ -1,16 +1,14 @@
 #include "exp.h"
 
-Expression::Expression() {}
-
-Expression::~Expression() {}
-
+#include <utility>
+Expression::Expression(){}
 
 /** ---------- ConstantExp---------- */
 ConstantExp::ConstantExp(int val) {
     value = val;
 }
 
-int ConstantExp::eval(EvaluationContext & context) {
+int ConstantExp::eval(SymbolTable & context) {
     return value;
 }
 
@@ -22,19 +20,18 @@ ExpressionType ConstantExp::type() {
     return CONSTANT;
 }
 
-int ConstantExp::getConstantValue() {
+int ConstantExp::getConstantValue() const {
     return value;
 }
 
 /** ----------IdentifierExp----------- */
 
-IdentifierExp::IdentifierExp(std::string name) {
-    this->name = name;
-}
+IdentifierExp::IdentifierExp(std::string name) :
+    name(std::move(name)) {}
 
-int IdentifierExp::eval(EvaluationContext & context) {
+int IdentifierExp::eval(SymbolTable & context) {
     if (!context.isDefined(name)) {
-        throw "Undefined variable: " + name;
+        std::cerr << "Variable " << name << " is not defined." << std::endl;
     }
     return context.getValue(name);
 }
@@ -53,7 +50,7 @@ std::string IdentifierExp::getIdentifierName() {
 
 /** ------ CompoundExp --------*/
 CompoundExp::CompoundExp(std::string op, Expression *lhs, Expression *rhs):
-    op(op) {
+    op(std::move(op)) {
     std::unique_ptr<Expression> lhs_ptr(lhs);
     std::unique_ptr<Expression> rhs_ptr(rhs);
     this->lhs = std::move(lhs_ptr);
@@ -62,7 +59,7 @@ CompoundExp::CompoundExp(std::string op, Expression *lhs, Expression *rhs):
 
 CompoundExp::~CompoundExp() = default;
 
-int CompoundExp::eval(EvaluationContext & context) {
+int CompoundExp::eval(SymbolTable & context) {
     if (op == "+") {
         return lhs->eval(context) + rhs->eval(context);
     } else if (op == "-") {
@@ -80,10 +77,12 @@ int CompoundExp::eval(EvaluationContext & context) {
         */
         return lhs->eval(context) % rhs->eval(context);     
     } else if (op == "**") {
-        return pow(lhs->eval(context), rhs->eval(context));
+        return static_cast<int>(pow(lhs->eval(context), rhs->eval(context)));
     }else {
-        throw "Illegal operator in expression";
+        //TODO: handle error,maybe throw exception
+        std::cerr << "Unknown operator: " << op << std::endl;
     }
+    return 0;
 }
 
 //TODO: Implement the toString method for CompoundExp

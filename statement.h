@@ -12,22 +12,19 @@ enum StatementType
     INPUT,
     IF,
     GOTO,
-    ENDSTAT,
+    ENDSTATE,
     REM
 };
 
 class Statement
 {
 public:
-    Statement();
-    Statement(int stmtNum);
-    virtual ~Statement();
-    virtual void execute(EvaluationContext & context) = 0;
+    explicit Statement(int stmtNum = 0);
+    virtual ~Statement() = default;
+    virtual void execute(SymbolTable & context) = 0;
     virtual std::string toString() = 0;
-    void setNext(std::unique_ptr<Statement> &next); //will be used by program class
-    std::unique_ptr<Statement> &getNext();
-    int getStmtNum();
-    std::unique_ptr<Statement> next;
+    int getStmtNum() const;
+
 
 protected:
     int statementNumber;    
@@ -40,7 +37,7 @@ public:
     LetStatement();
     LetStatement(int stmtNum, std::string var, Expression *exp);
     ~LetStatement() override;
-    void execute(EvaluationContext & context) override;
+    void execute(SymbolTable & context) override;
     std::string toString() override;
 
 
@@ -55,7 +52,7 @@ public:
     PrintStatement();
     PrintStatement(int stmtNum, Expression *exp);
     ~PrintStatement() override;
-    void execute(EvaluationContext & context) override;
+    void execute(SymbolTable & context) override;
     std::string toString() override;
 
 private:

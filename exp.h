@@ -9,7 +9,7 @@
 
 /* Forward reference */
 
-class EvaluationContext;
+class SymbolTable;
 
 /*
  * Type: ExpressionType
@@ -34,8 +34,8 @@ class Expression {
 public:
 
     Expression();
-    virtual ~Expression();
-    virtual int eval(EvaluationContext & context) = 0;
+    virtual ~Expression() = default;
+    virtual int eval(SymbolTable & context) = 0;
     virtual std::string toString() = 0;
     virtual ExpressionType type() = 0;
 
@@ -51,11 +51,11 @@ public:
 
     explicit ConstantExp(int val);
 
-    int eval(EvaluationContext & context) override;
+    int eval(SymbolTable & context) override;
     std::string toString() override;
     ExpressionType type() override;
 
-    int getConstantValue();
+    int getConstantValue() const;
 
 private:
 
@@ -74,7 +74,7 @@ class IdentifierExp: public Expression {
 public:
     explicit IdentifierExp(std::string name);
 
-    int eval(EvaluationContext & context) override;
+    int eval(SymbolTable & context) override;
     std::string toString() override;
     ExpressionType type() override;
 
@@ -98,7 +98,7 @@ public:
 
     ~CompoundExp() override;
 
-    int eval(EvaluationContext & context) override;
+    int eval(SymbolTable & context) override;
     std::string toString() override;
     ExpressionType type() override;
 

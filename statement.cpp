@@ -1,28 +1,14 @@
 #include "statement.h"
 
-Statement::Statement() {
-    statementNumber = 0;
-    next = nullptr;
+#include <utility>
 
-}
 
 Statement::Statement(int stmtNum) {
     statementNumber = stmtNum;
-    next = nullptr;
+    type = ENDSTATE;
 }
 
-Statement::~Statement() {
-}
-
-void Statement::setNext(std::unique_ptr<Statement> &next) {
-    this->next = std::move(next);
-}
-
-std::unique_ptr<Statement> &Statement::getNext() {
-    return next;
-}
-
-int Statement::getStmtNum() {
+int Statement::getStmtNum() const {
     return statementNumber;
 }
 
@@ -32,12 +18,13 @@ int Statement::getStmtNum() {
 LetStatement::LetStatement():
     Statement() {
     type = LET;
+    exp = nullptr;
 }
 
 LetStatement::LetStatement(int stmtNum, std::string var, Expression *exp):
-    Statement(stmtNum) {
+    Statement(stmtNum),
+    variable(std::move(var)) {
     type = LET;
-    variable = var;
     this->exp = exp;
 }
 
@@ -45,7 +32,7 @@ LetStatement::~LetStatement() {
     delete exp;
 }
 
-void LetStatement::execute(EvaluationContext & context) {
+void LetStatement::execute(SymbolTable & context) {
     context.setValue(variable, exp->eval(context));
 }
 
@@ -57,6 +44,7 @@ std::string LetStatement::toString() {
 PrintStatement::PrintStatement():
     Statement() {
     type = PRINT;
+    exp = nullptr;
 }
 
 PrintStatement::PrintStatement(int stmtNum, Expression *exp):
@@ -69,7 +57,7 @@ PrintStatement::~PrintStatement() {
     delete exp;
 }
 
-void PrintStatement::execute(EvaluationContext & context) {
+void PrintStatement::execute(SymbolTable & context) {
     std::cout << exp->eval(context)
                 << std::endl;
 }
