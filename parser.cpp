@@ -10,47 +10,64 @@ Parser::~Parser() {
 
 Statement *Parser::getStatement(std::string &stmt)
 {
-    std::vector<std::string> tokens = tk->tokenize(stmt);
-    if (tokens.size() == 0)
+    std::vector<Token> tokens = tk->tokenize(stmt);
+    if (tokens.empty())
     {
         return nullptr;
     }
-    int stmtNum = std::stoi(tokens[0]);
+    Token lineNumber = tokens[0];
+    if (lineNumber.type != TokenType::NUMBER)
+    {
+        return parseImmediate(tokens);
+    }
+    return parseStatement(tokens);
 
-    if (tokens[1] == "LET")
+}
+
+Statement *Parser::parseImmediate(std::vector<Token> &tokens)
+{
+    if (tokens.size() < 1)
     {
-        return parseLet(tokens);
+        return nullptr;
     }
-    else if (tokens[1] == "PRINT")
-    {
-        return parsePrint(tokens);
-    }
-    // else if (tokens[1] == "INPUT")
+    // if (tokens[0].value == "RUN")
     // {
-    //     return parseInput(tokens);
+    //     return new RunStatement();
     // }
-    // else if (tokens[1] == "IF")
+    // else if (tokens[0].value == "LIST")
     // {
-    //     return parseIf(tokens);
+    //     return new ListStatement();
     // }
-    // else if (tokens[1] == "GOTO")
+    // else if (tokens[0].value == "CLEAR")
     // {
-    //     return parseGoto(tokens);
+    //     return new ClearStatement();
     // }
-    // else if (tokens[1] == "END")
+    // else if (tokens[0].value == "QUIT")
     // {
-    //     return parseEnd(tokens);
+    //     return new QuitStatement();
     // }
-    else //some other statement
+    // else if (tokens[0].value == "HELP")
+    // {
+    //     return new HelpStatement();
+    // }
+    else
     {
         return nullptr;
     }
 }
 
-Expression *Parser::parseExp(std::vector<std::string> &expTokens)
+Statement* Parser::parseStatement(std::vector<Token> &tokens)
+{
+    std::string cmd = tokens[1].value;
+    if (cmd == "LET") {
+        return parseLet(tokens);
+    }
+
+}
+Expression *Parser::parseExp(std::vector<Token> &expTokens)
 {
     std::vector<ExpToken> tokens = tk->tokenizeExp(expTokens);
-    if (tokens.size() == 0)
+    if (tokens.empty())
     {
         return nullptr;
     }
@@ -67,13 +84,13 @@ Expression *Parser::parseExp(std::vector<std::string> &expTokens)
         {
             expStack.push(std::make_unique<IdentifierExp>(token.value));
         }
-        else if (token.type == LPAREN)
+        else if (token.type == LEFT_PAREN)
         {
             opStack.push(token);
         }
-        else if (token.type == RPAREN)
+        else if (token.type == RIGHT_PAREN)
         {
-            while (opStack.top().type != LPAREN)
+            while (opStack.top().type != LEFT_PAREN)
             {
                 ExpToken op = opStack.top();
                 opStack.pop();
@@ -122,83 +139,39 @@ Expression *Parser::parseExp(std::vector<std::string> &expTokens)
 
 }
 
-Statement *Parser::parseLet(std::vector<std::string> &tokens)
+Statement *Parser::parseLet(std::vector<Token> &tokens)
 {
     if (tokens.size() < 4)
     {
         return nullptr;
     }
-    std::string var = tokens[2];
-    std::vector<std::string> expTokens(tokens.begin() + 3, tokens.end());
+    std::string var = tokens[2].value;
+    std::vector<Token> expTokens(tokens.begin() + 3, tokens.end());
     Expression *exp = parseExp(expTokens);
     if (exp == nullptr)
     {
         return nullptr;
     }
-    return new LetStatement(std::stoi(tokens[0]), var, exp);
+
+    return new LetStatement(std::stoi(tokens[0].value), var, exp);
 }
 
 // //unchecked
-Statement *Parser::parsePrint(std::vector<std::string> &tokens)
+Statement *Parser::parsePrint(std::vector<Token> &tokens)
 {
     if (tokens.size() < 3)
     {
         return nullptr;
     }
-    std::vector<std::string> expTokens(tokens.begin() + 2, tokens.end());
+    std::vector<Token> expTokens(tokens.begin() + 2, tokens.end());
     Expression *exp = parseExp(expTokens);
     if (exp == nullptr)
     {
         return nullptr;
     }
-    return new PrintStatement(std::stoi(tokens[0]), exp);
+    return new PrintStatement(std::stoi(tokens[0].value), exp);
 }
 
-// Statement *Parser::parseInput(std::vector<std::string> &tokens)
-// {
-//     if (tokens.size() < 3)
-//     {
-//         return nullptr;
-//     }
-//     std::string var = tokens[2];
-//     return new InputStatement(std::stoi(tokens[0]), var);
-// }
 
-// Statement *Parser::parseIf(std::vector<std::string> &tokens)
-// {
-//     if (tokens.size() < 6)
-//     {
-//         return nullptr;
-//     }
-//     Expression *lhs = parseExp(tokens, 2);
-//     if (lhs == nullptr)
-//     {
-//         return nullptr;
-//     }
-//     std::string op = tokens[3];
-//     Expression *rhs = parseExp(tokens, 4);
-//     if (rhs == nullptr)
-//     {
-//         return nullptr;
-//     }
-//     int dest = std::stoi(tokens[5]);
-//     return new IfStatement(std::stoi(tokens[0]), lhs, op, rhs, dest);
-// }
-
-// Statement *Parser::parseGoto(std::vector<std::string> &tokens)
-// {
-//     if (tokens.size() < 3)
-//     {
-//         return nullptr;
-//     }
-//     int dest = std::stoi(tokens[2]);
-//     return new GotoStatement(std::stoi(tokens[0]), dest);
-// }
-
-// Statement *Parser::parseEnd(std::vector<std::string> &tokens)
-// {
-//     return new EndStatement(std::stoi(tokens[0]));
-// }
-// //unchecked
 
 

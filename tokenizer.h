@@ -1,7 +1,25 @@
 #ifndef TOKENIZER_H
 #define TOKENIZER_H
-#include <string>
-#include <vector>
+#include <bits/stdc++.h>
+
+enum class TokenType
+{
+    NUMBER,
+    OPERATOR,
+    VARIABLE,
+    LPAREN,
+    RPAREN,
+    EQUALS,
+    LESS,
+    GREATER
+};
+
+struct Token
+{
+    TokenType type;
+    std::string value;
+};
+
 
 enum ExpType
 {
@@ -11,8 +29,8 @@ enum ExpType
     DIV,
     MOD,
     POW,
-    LPAREN,
-    RPAREN,
+    LEFT_PAREN,
+    RIGHT_PAREN,
     NUM,
     VAR,
     END
@@ -29,8 +47,8 @@ class Tokenizer
 {
 public:
     Tokenizer();
-    std::vector<std::string> tokenize(std::string &str);
-    std::vector<ExpToken> tokenizeExp(std::vector<std::string> &expTokens);
+    std::vector<Token> Tokenizer::tokenize(std::string &str);
+    std::vector<ExpToken> Tokenizer::tokenizeExp(std::vector<Token> &expTokens);
 
 private:
     std::vector<std::string> tokens;

@@ -15,14 +15,20 @@ public:
 
 private:
     Tokenizer* tk;
-    Expression *parseExp(std::vector<std::string> &expTokens);
-    Statement *parseLet(std::vector<std::string> &tokens);
-    Statement *parsePrint(std::vector<std::string> &tokens);
-    Statement *parseInput(std::vector<std::string> &tokens);
-    Statement *parseIf(std::vector<std::string> &tokens);
-    Statement *parseGoto(std::vector<std::string> &tokens);
-    Statement *parseEnd(std::vector<std::string> &tokens);
-    Statement *parseRem(std::vector<std::string> &tokens);
+    Statement *parseImmediate(std::vector<Token> &tokens);
+    Statement *parseStatement(std::vector<Token> &tokens);
+
+
+    Statement *parseLet(std::vector<Token> &tokens);
+    Statement *parsePrint(std::vector<Token> &tokens);
+    Statement *parseInput(std::vector<Token> &tokens);
+    Statement *parseIf(std::vector<Token> &tokens);
+    Statement *parseGoto(std::vector<Token> &tokens);
+    Statement *parseEnd(std::vector<Token> &tokens);
+    Statement *parseRem(std::vector<Token> &tokens);
+
+    Expression *parseExp(std::vector<Token> &expTokens);
+
 
 };
 
