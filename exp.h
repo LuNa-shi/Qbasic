@@ -3,8 +3,9 @@
 
 
 #include <string>
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 #include "tokenizer.h"
+#include "context.h"
 
 /* Forward reference */
 
@@ -38,13 +39,7 @@ public:
     virtual std::string toString() = 0;
     virtual ExpressionType type() = 0;
 
-    /* Getter methods for convenience */
 
-    virtual int getConstantValue();
-    virtual std::string getIdentifierName();
-    virtual std::string getOperator();
-    virtual Expression *getLHS();
-    virtual Expression *getRHS();
 
 };
 
@@ -54,13 +49,13 @@ class ConstantExp: public Expression {
 
 public:
 
-    ConstantExp(int val);
+    explicit ConstantExp(int val);
 
-    virtual int eval(EvaluationContext & context);
-    virtual std::string toString();
-    virtual ExpressionType type();
+    int eval(EvaluationContext & context) override;
+    std::string toString() override;
+    ExpressionType type() override;
 
-    virtual int getConstantValue();
+    int getConstantValue();
 
 private:
 
@@ -77,19 +72,16 @@ private:
 class IdentifierExp: public Expression {
 
 public:
+    explicit IdentifierExp(std::string name);
 
-    IdentifierExp(std::string name);
+    int eval(EvaluationContext & context) override;
+    std::string toString() override;
+    ExpressionType type() override;
 
-    virtual int eval(EvaluationContext & context);
-    virtual std::string toString();
-    virtual ExpressionType type();
-
-    virtual std::string getIdentifierName();
+    std::string getIdentifierName();
 
 private:
-
     std::string name;
-
 };
 
 /*
@@ -103,15 +95,16 @@ class CompoundExp: public Expression {
 public:
 
     CompoundExp(std::string op, Expression *lhs, Expression *rhs);
-    virtual ~CompoundExp();
 
-    virtual int eval(EvaluationContext & context);
-    virtual std::string toString();
-    virtual ExpressionType type();
+    ~CompoundExp() override;
 
-    virtual std::string getOperator();
-    virtual Expression *getLHS();
-    virtual Expression *getRHS();
+    int eval(EvaluationContext & context) override;
+    std::string toString() override;
+    ExpressionType type() override;
+
+    std::string getOperator();
+    Expression *getLHS();
+    Expression *getRHS();
 
 private:
 
@@ -120,26 +113,6 @@ private:
 
 };
 
-/*
- * Class: EvaluationContext
- * ------------------------
- * This class encapsulates the information that the evaluator needs to
- * know in order to evaluate an expression.
- */
-
-class EvaluationContext {
-
-public:
-
-    void setValue(std::string var, int value);
-    int getValue(std::string var);
-    bool isDefined(std::string var);
-
-private:
-
-    std::unordered_map<std::string,int> symbolTable;
-
-};
 
 
 

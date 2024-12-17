@@ -1,4 +1,5 @@
-QT       += core gui
+QT       += core gui testlib
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,7 +17,8 @@ SOURCES += \
     parser.cpp \
     program.cpp \
     statement.cpp \
-    tokenizer.cpp
+    tokenizer.cpp \
+    tokenizeTest.cpp
 
 HEADERS += \
     context.h \

@@ -2,23 +2,21 @@
 #define PROGRAM_H
 #include "statement.h"
 #include <bits/stdc++.h>
-class program
+class Program
 {
 public:
-    program();
+    Program();
+    ~Program();
+    void executeStatement(EvaluationContext &context, Statement *stmt);
+    void appendStatement(Statement *stmt);
+    void removeStatement(int stmtNum);
+    std::string toString();
+
 
 private:
     std::unique_ptr<Statement> head;
     // std::unique_ptr<Statement> tail;
     std::map<int, Statement *> statementMap;
-    int nextStatementNumber;
-
-    void executeStatement(EvaluationContext &context, Statement *stmt);
-    void appendStatement(Statement *stmt);
-    void removeStatement(int stmtNum);
-
-
-
 
 };
 

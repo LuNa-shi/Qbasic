@@ -4,25 +4,6 @@ Expression::Expression() {}
 
 Expression::~Expression() {}
 
-int Expression::getConstantValue() {
-    throw "getConstantValue: not a constant expression";
-}
-
-std::string Expression::getIdentifierName() {
-    throw "getIdentifierName: not an identifier expression";
-}
-
-std::string Expression::getOperator() {
-    throw "getOperator: not a compound expression";
-}
-
-Expression *Expression::getLHS() {
-    throw "getLHS: not a compound expression";
-}
-
-Expression *Expression::getRHS() {
-    throw "getRHS: not a compound expression";
-}
 
 /** ---------- ConstantExp---------- */
 ConstantExp::ConstantExp(int val) {
@@ -90,7 +71,7 @@ int CompoundExp::eval(EvaluationContext & context) {
         return lhs->eval(context) * rhs->eval(context);
     } else if (op == "/") {
         return lhs->eval(context) / rhs->eval(context);
-    } else if (op == "%") {
+    } else if (op == "MOD") {
         /*The MOD operator has the same precedence as * and /. 
         In the expression LET r = a MOD b, 
         the absolute value of r should be less than the absolute value of b,
@@ -128,16 +109,5 @@ Expression *CompoundExp::getRHS() {
 
 
 
-/** EvaluationContext */
-void EvaluationContext::setValue(std::string var, int value) {
-    symbolTable[var] = value;
-}
 
-int EvaluationContext::getValue(std::string var) {
-    return symbolTable[var];
-}
-
-bool EvaluationContext::isDefined(std::string var) {
-    return symbolTable.find(var) != symbolTable.end();
-}
 
